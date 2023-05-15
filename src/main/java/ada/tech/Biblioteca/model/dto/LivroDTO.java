@@ -1,20 +1,25 @@
 package ada.tech.Biblioteca.model.dto;
 
-import ada.tech.Biblioteca.model.entity.CategoriaEntity;
-import ada.tech.Biblioteca.model.entity.LivroEntity;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDate;
 
 @Getter
 @Setter
 public class LivroDTO {
     private Long id;
-    private String nome;
+    private String titulo;
     private EditoraDTO editora;
     private CategoriaDTO categoria;
     @Size(max = 13, message="isbn acima do limite")
     private String isbn;
+    private String resumo;
+    private String sumario;
+    private Double preco;
+    private Integer nPgs;
+    private LocalDate dataSis;
 
 //    public LivroDTO update(LivroEntity livro) {
 //        this.id = livro.getId();

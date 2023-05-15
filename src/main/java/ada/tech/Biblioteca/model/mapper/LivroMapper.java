@@ -14,7 +14,7 @@ public class LivroMapper {
     public LivroDTO update(LivroEntity livroEntity) {
         LivroDTO livroDTO = new LivroDTO();
         livroDTO.setId(livroEntity.getId());
-        livroDTO.setNome(livroEntity.getNome());
+        livroDTO.setTitulo(livroEntity.getNome());
         livroDTO.setIsbn(livroEntity.getIsbn());
         livroDTO.setEditora(editoraMapper.update(livroEntity.getEditora()));
         livroDTO.setCategoria(categoriaMapper.update(livroEntity.getCategoria()));
@@ -23,7 +23,7 @@ public class LivroMapper {
 
     public LivroEntity update(LivroDTO livroDTO) {
         LivroEntity livroEntity = new LivroEntity();
-        livroEntity.setNome(livroDTO.getNome());
+        livroEntity.setNome(livroDTO.getTitulo());
         livroEntity.setIsbn(livroDTO.getIsbn());
         livroEntity.setEditora(editoraMapper.update(livroDTO.getEditora()));
         livroEntity.setCategoria(categoriaMapper.update(livroDTO.getCategoria()));

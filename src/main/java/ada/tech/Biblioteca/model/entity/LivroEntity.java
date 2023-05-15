@@ -32,16 +32,16 @@ public class LivroEntity {
     @JoinColumn(name="categoria")
     private CategoriaEntity categoria;
 
-    @Column
+    @Column(name="resumo", nullable = false)
     private String resumo;
 
     @Column
     private String sumario;
 
-    @Column
+    @Column(name="preço", nullable = false)
     private Double preco;
 
-    @Column
+    @Column(name="n° de páginas", nullable = false)
     private Integer nPgs;
 
     @Column

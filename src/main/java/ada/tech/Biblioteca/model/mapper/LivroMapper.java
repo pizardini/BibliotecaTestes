@@ -25,6 +25,7 @@ public class LivroMapper {
         LivroEntity livroEntity = new LivroEntity();
         livroEntity.setTitulo(livroDTO.getTitulo());
         livroEntity.setIsbn(livroDTO.getIsbn());
+        livroEntity.setResumo(livroDTO.getResumo());
         livroEntity.setEditora(editoraMapper.update(livroDTO.getEditora()));
         livroEntity.setCategoria(categoriaMapper.update(livroDTO.getCategoria()));
         return livroEntity;

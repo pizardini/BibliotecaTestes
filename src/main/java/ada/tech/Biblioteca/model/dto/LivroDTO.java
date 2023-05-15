@@ -1,5 +1,6 @@
 package ada.tech.Biblioteca.model.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,9 +16,12 @@ public class LivroDTO {
     private CategoriaDTO categoria;
     @Size(max = 13, message="isbn acima do limite")
     private String isbn;
+    @Size(max = 500, message="resumo acima do limite")
     private String resumo;
     private String sumario;
+    @Min(value = 20, message = "preço mínimo deve ser 20")
     private Double preco;
+    @Min(value = 100, message = "o mínimo de páginas é 100")
     private Integer nPgs;
     private LocalDate dataSis;
 

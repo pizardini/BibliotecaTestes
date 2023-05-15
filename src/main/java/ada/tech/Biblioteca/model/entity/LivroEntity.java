@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @Entity
@@ -13,8 +15,9 @@ public class LivroEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name="nome", nullable = false, unique = true)
-    private String nome;
+
+    @Column(name="titulo", nullable = false, unique = true)
+    private String titulo;
 
     @Column(name="isbn", nullable = false, unique = true, length = 13)
     private String isbn;
@@ -28,6 +31,21 @@ public class LivroEntity {
     @ManyToOne
     @JoinColumn(name="categoria")
     private CategoriaEntity categoria;
+
+    @Column
+    private String resumo;
+
+    @Column
+    private String sumario;
+
+    @Column
+    private Double preco;
+
+    @Column
+    private Integer nPgs;
+
+    @Column
+    private LocalDate dataSis;
 
 //    public LivroEntity update(LivroDTO livro) {
 //        this.id = livro.getId();

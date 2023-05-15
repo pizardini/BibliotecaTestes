@@ -1,5 +1,6 @@
 package ada.tech.Biblioteca.model.dto;
 
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -27,6 +28,8 @@ public class LivroDTO {
 
     @Min(value = 100, message = "o mínimo de páginas é 100")
     private Integer nPgs;
+
+    @Future(message="A data precisa ser futura")
     private LocalDate dataSis;
 
 //    public LivroDTO update(LivroEntity livro) {

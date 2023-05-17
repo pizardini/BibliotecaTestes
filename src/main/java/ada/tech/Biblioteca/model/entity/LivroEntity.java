@@ -40,7 +40,7 @@ public class LivroEntity {
     private Double preco;
 
     @Column(name="n° de páginas", nullable = false)
-    private Integer nPgs;
+    private Integer paginas;
 
     @Column
     private LocalDate dataSis;

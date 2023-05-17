@@ -84,7 +84,7 @@ public class LivroService {
     }
 
     public List<LivroDTO> buscarPorNomeOuIsbn(String nome, String isbn) {
-        List<LivroEntity> listaEntities = repository.findByNomeOrIsbn(nome, isbn);
+        List<LivroEntity> listaEntities = repository.findByTituloOrIsbn(nome, isbn);
         return mapper.updateListDTO(listaEntities);
     }
 }

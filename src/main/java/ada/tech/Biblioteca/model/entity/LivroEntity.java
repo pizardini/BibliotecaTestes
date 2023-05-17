@@ -22,12 +22,10 @@ public class LivroEntity {
     @Column(name="isbn", nullable = false, unique = true, length = 13)
     private String isbn;
 
-//    private Long editora_id;
     @ManyToOne
     @JoinColumn(name="editora")
     private EditoraEntity editora;
 
-//    private Long categoria_id;
     @ManyToOne
     @JoinColumn(name="categoria")
     private CategoriaEntity categoria;
@@ -47,10 +45,4 @@ public class LivroEntity {
     @Column
     private LocalDate dataSis;
 
-//    public LivroEntity update(LivroDTO livro) {
-//        this.id = livro.getId();
-//        this.nome = livro.getNome();
-//        this.isbn = livro.getIsbn();
-//        return this;
-//    }
 }

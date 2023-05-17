@@ -14,13 +14,6 @@ public class CategoriaDTO {
     private String nome;
     private String descricao;
 
-//    public CategoriaDTO update(CategoriaEntity categoria) {
-//        this.id = categoria.getId();
-//        this.nome = categoria.getNome();
-//        this.descricao = categoria.getDescricao();
-//        return this;
-//    }
-
 
 //    @NotNull - só restringe se for nulo
 //    @NotEmpty - só restring se for nulo ou vazio - serve para coleções, listas, arrays

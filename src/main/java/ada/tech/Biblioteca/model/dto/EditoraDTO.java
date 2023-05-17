@@ -14,12 +14,5 @@ public class EditoraDTO {
     private String nome;
     private String descricao;
 
-//    public EditoraDTO update(EditoraEntity editora) {
-//        this.id = editora.getId();
-//        this.nome = editora.getNome();
-//        this.descricao = editora.getDescricao();
-//        return this;
-//    }
-
 }
 

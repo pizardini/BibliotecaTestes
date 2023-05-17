@@ -32,12 +32,5 @@ public class LivroDTO {
     @Future(message="A data precisa ser futura")
     private LocalDate dataSis;
 
-//    public LivroDTO update(LivroEntity livro) {
-//        this.id = livro.getId();
-//        this.nome = livro.getNome();
-//        this.isbn = livro.getIsbn();
-//        return this;
-//    }
-
 }
 

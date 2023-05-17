@@ -16,6 +16,11 @@ public class LivroMapper {
         livroDTO.setId(livroEntity.getId());
         livroDTO.setTitulo(livroEntity.getTitulo());
         livroDTO.setIsbn(livroEntity.getIsbn());
+        livroDTO.setResumo(livroEntity.getResumo());
+        livroDTO.setSumario(livroEntity.getSumario());
+        livroDTO.setPreco(livroEntity.getPreco());
+        livroDTO.setNPgs(livroEntity.getNPgs());
+        livroDTO.setDataSis(livroEntity.getDataSis());
         livroDTO.setEditora(editoraMapper.update(livroEntity.getEditora()));
         livroDTO.setCategoria(categoriaMapper.update(livroEntity.getCategoria()));
         return livroDTO;
@@ -26,6 +31,10 @@ public class LivroMapper {
         livroEntity.setTitulo(livroDTO.getTitulo());
         livroEntity.setIsbn(livroDTO.getIsbn());
         livroEntity.setResumo(livroDTO.getResumo());
+        livroEntity.setSumario(livroDTO.getSumario());
+        livroEntity.setPreco(livroDTO.getPreco());
+        livroEntity.setNPgs(livroDTO.getNPgs());
+        livroEntity.setDataSis(livroDTO.getDataSis());
         livroEntity.setEditora(editoraMapper.update(livroDTO.getEditora()));
         livroEntity.setCategoria(categoriaMapper.update(livroDTO.getCategoria()));
         return livroEntity;

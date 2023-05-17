@@ -27,7 +27,7 @@ public class LivroDTO {
     private Double preco;
 
     @Min(value = 100, message = "o mínimo de páginas é 100")
-    private Integer nPgs;
+    private Integer paginas;
 
     @Future(message="A data precisa ser futura")
     private LocalDate dataSis;

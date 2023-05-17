@@ -29,8 +29,8 @@ public class LivroDTO {
     @Min(value = 100, message = "o mínimo de páginas é 100")
     private Integer paginas;
 
-    @Future(message="A data precisa ser futura")
-    private LocalDate dataSis;
+//    @Future(message="A data precisa ser futura")
+//    private LocalDate dataSis;
 
 }
 

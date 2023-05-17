@@ -19,7 +19,7 @@ public class LivroDTOTest {
         livroDTO.setSumario("Sumário do livro de teste");
         livroDTO.setPreco(25.0);
         livroDTO.setPaginas(150);
-        livroDTO.setDataSis(LocalDate.now().plusDays(1));
+//        livroDTO.setDataSis(LocalDate.now().plusDays(1));
 
         // Verificação das propriedades do objeto LivroDTO
         Assertions.assertEquals(1L, livroDTO.getId());
@@ -29,7 +29,7 @@ public class LivroDTOTest {
         Assertions.assertEquals("Sumário do livro de teste", livroDTO.getSumario());
         Assertions.assertEquals(25.0, livroDTO.getPreco());
         Assertions.assertEquals(150, livroDTO.getPaginas());
-        Assertions.assertEquals(LocalDate.now().plusDays(1), livroDTO.getDataSis());
+//        Assertions.assertEquals(LocalDate.now().plusDays(1), livroDTO.getDataSis());
     }
 }
 

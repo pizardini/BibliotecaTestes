@@ -15,6 +15,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.time.LocalDate;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 public class LivroControllerTest {
@@ -26,7 +28,7 @@ public class LivroControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private LivroRepository livroRepository;
+    private LivroRepository repository;
 
     @Test
     public void carregouContexto() {
@@ -34,8 +36,9 @@ public class LivroControllerTest {
     }
 
     @Test
-    public void listarLivrosTest() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/livros"))
+    public void testeOk() throws Exception {
+        this.mockMvc
+                .perform(MockMvcRequestBuilders.get("/livros"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
@@ -45,9 +48,11 @@ public class LivroControllerTest {
         LivroDTO livroDTO = new LivroDTO();
         livroDTO.setTitulo("Livro Teste");
         livroDTO.setIsbn("1234567890123");
-        livroDTO.setResumo("Resumo do livro teste");
-        livroDTO.setPreco(19.99);
+        livroDTO.setResumo("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper ni");
+        livroDTO.setPreco(59.90);
         livroDTO.setPaginas(200);
+
+
 
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(livroDTO);
@@ -68,7 +73,7 @@ public class LivroControllerTest {
         livro.setPreco(19.99);
         livro.setPaginas(200);
 
-        livroRepository.save(livro);
+        repository.save(livro);
 
         this.mockMvc.perform(MockMvcRequestBuilders.get("/livros/{id}", livro.getId()))
                 .andDo(MockMvcResultHandlers.print())
@@ -84,7 +89,7 @@ public class LivroControllerTest {
         livro.setPreco(19.99);
         livro.setPaginas(200);
 
-        livroRepository.save(livro);
+        repository.save(livro);
 
         LivroDTO livroDTO = new LivroDTO();
         livroDTO.setTitulo("Livro Atualizado");
@@ -112,7 +117,7 @@ public class LivroControllerTest {
         livro.setPreco(19.99);
         livro.setPaginas(200);
 
-        livroRepository.save(livro);
+        repository.save(livro);
 
         this.mockMvc.perform(MockMvcRequestBuilders.delete("/livros/{id}", livro.getId()))
                 .andDo(MockMvcResultHandlers.print())

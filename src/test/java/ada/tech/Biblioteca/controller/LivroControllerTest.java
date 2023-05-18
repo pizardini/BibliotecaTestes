@@ -6,6 +6,7 @@ import ada.tech.Biblioteca.repository.LivroRepository;
 import ada.tech.Biblioteca.model.mapper.LivroMapper;
 import ada.tech.Biblioteca.service.LivroService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -61,6 +62,7 @@ public class LivroControllerTest {
         livro1.setPreco(59.90);
         livro1.setPaginas(200);
 
+
         listaLivros.add(livro1);
 
         LivroService livroService = Mockito.mock(LivroService.class);
@@ -81,8 +83,11 @@ public class LivroControllerTest {
         livroDTO.setSumario("sumario de teste");
         livroDTO.setPreco(59.90);
         livroDTO.setPaginas(200);
+        livroDTO.setDataSis(LocalDate.now().plusDays(1));
 
         ObjectMapper mapper = new ObjectMapper();
+//        mapper.registerModule(new JavaTimeModule());
+        mapper.findAndRegisterModules();
         String json = mapper.writeValueAsString(livroDTO);
 
         this.mockMvc.perform(MockMvcRequestBuilders.post("/livros")
@@ -204,6 +209,29 @@ public class LivroControllerTest {
         livroDTO.setPaginas(99);
 
         ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(livroDTO);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/livros")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError());
+    }
+
+    @Test
+    public void criarLivroDataErradaTest() throws Exception {
+        LivroDTO livroDTO = new LivroDTO();
+        livroDTO.setTitulo("Criar Livro Teste");
+        livroDTO.setIsbn("22");
+        livroDTO.setResumo("Lorem ipsum");
+        livroDTO.setSumario("sumario de teste");
+        livroDTO.setPreco(59.90);
+        livroDTO.setPaginas(200);
+        livroDTO.setDataSis(LocalDate.now().minusDays(1));
+
+        ObjectMapper mapper = new ObjectMapper();
+//        mapper.registerModule(new JavaTimeModule());
+        mapper.findAndRegisterModules();
         String json = mapper.writeValueAsString(livroDTO);
 
         this.mockMvc.perform(MockMvcRequestBuilders.post("/livros")

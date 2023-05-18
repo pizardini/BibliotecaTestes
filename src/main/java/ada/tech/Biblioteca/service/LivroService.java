@@ -1,8 +1,6 @@
 package ada.tech.Biblioteca.service;
 
 import ada.tech.Biblioteca.model.dto.LivroDTO;
-import ada.tech.Biblioteca.model.entity.CategoriaEntity;
-import ada.tech.Biblioteca.model.entity.EditoraEntity;
 import ada.tech.Biblioteca.model.entity.LivroEntity;
 import ada.tech.Biblioteca.model.mapper.LivroMapper;
 import ada.tech.Biblioteca.repository.LivroRepository;
@@ -69,19 +67,6 @@ public class LivroService {
         return mapper.updateListDTO(listaEntities);
     }
 
-    public Object buscarPorCategoria(Long categoriaId) {
-        CategoriaEntity categoria = new CategoriaEntity();
-        categoria.setId(categoriaId);
-        List<LivroEntity> listaEntities = repository.findByCategoriaId(categoriaId);
-        return mapper.updateListDTO(listaEntities);
-    }
-
-    public Object buscarPorEditora(Long editoraId) {
-        EditoraEntity editora = new EditoraEntity();
-        editora.setId(editoraId);
-        List<LivroEntity> listaEntities = repository.findByEditoraId(editoraId);
-        return mapper.updateListDTO(listaEntities);
-    }
 
     public List<LivroDTO> buscarPorNomeOuIsbn(String nome, String isbn) {
         List<LivroEntity> listaEntities = repository.findByTituloOrIsbn(nome, isbn);

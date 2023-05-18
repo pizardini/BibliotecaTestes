@@ -2,6 +2,7 @@ package ada.tech.Biblioteca.model.dto;
 
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,17 +13,19 @@ import java.time.LocalDate;
 @Setter
 public class LivroDTO {
     private Long id;
-    private String titulo;
-    private EditoraDTO editora;
-    private CategoriaDTO categoria;
 
-    @Size(max = 13, message="isbn acima do limite")
+    @NotNull
+    private String titulo;
+
+    @NotNull
     private String isbn;
 
+    @NotNull
     @Size(max = 500, message="resumo acima do limite")
     private String resumo;
     private String sumario;
 
+    @NotNull
     @Min(value = 20, message = "preço mínimo deve ser 20")
     private Double preco;
 

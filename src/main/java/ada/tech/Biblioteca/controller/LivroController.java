@@ -2,7 +2,6 @@ package ada.tech.Biblioteca.controller;
 
 import ada.tech.Biblioteca.model.dto.LivroDTO;
 import ada.tech.Biblioteca.model.dto.MensagemDTO;
-import ada.tech.Biblioteca.service.EditoraService;
 import ada.tech.Biblioteca.service.LivroService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -12,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/livros")
 @Slf4j
@@ -21,8 +18,6 @@ public class LivroController {
 
     @Autowired
     private LivroService livroService;
-
-
 
     public ResponseEntity<Object> listar() {
         try {
@@ -34,7 +29,7 @@ public class LivroController {
 
     }
 
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     public ResponseEntity<Object> pegarUm(@PathVariable("id") Long id) {
         try {
             return ResponseEntity.ok(livroService.pegarPorId(id));
@@ -45,13 +40,12 @@ public class LivroController {
             log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MensagemDTO(e.getMessage()));
         }
-
     }
 
     @PostMapping
     public ResponseEntity<Object> criar(@RequestBody @Valid LivroDTO livroDTO) {
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(livroService.criar(livroDTO));
+            return ResponseEntity.status(HttpStatus.OK).body(livroService.criar(livroDTO));
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MensagemDTO(e.getMessage()));
@@ -85,25 +79,6 @@ public class LivroController {
         }
     }
 
-    @GetMapping("/buscarPorCategoria")
-    public ResponseEntity<Object> buscarPorCategoria(@PathVariable Long categoriaId) {
-        try {
-            return ResponseEntity.ok(livroService.buscarPorCategoria(categoriaId));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MensagemDTO(e.getMessage()));
-        }
-    }
-
-    @GetMapping("/buscarPorEditora")
-    public ResponseEntity<Object> buscarPorEditora(@PathVariable Long editoraId) {
-        try {
-            return ResponseEntity.ok(livroService.buscarPorEditora(editoraId));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MensagemDTO(e.getMessage()));
-        }
-    }
 
     @GetMapping()
     public ResponseEntity<Object> buscarPorNomeOuIsbn(@RequestParam(name="nome", defaultValue = "") String nome,

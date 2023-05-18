@@ -14,6 +14,4 @@ public interface LivroRepository extends JpaRepository<LivroEntity, Long> {
 
     @Query("SELECT l  FROM LivroEntity l " + "WHERE UPPER(l.titulo) LIKE CONCAT('%', UPPER (:titulo),'%') " + "OR (l.isbn = :isbn)")
     List<LivroEntity> findByTituloOrIsbn(String titulo, String isbn);
-    List<LivroEntity> findByEditoraId(@Param("editoraId") Long editora);
-    List<LivroEntity> findByCategoriaId(@Param("categoriaId") Long categoriaId);
 }

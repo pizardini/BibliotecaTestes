@@ -8,8 +8,6 @@ import java.util.List;
 
 @Component
 public class LivroMapper {
-    private EditoraMapper editoraMapper = new EditoraMapper();
-    private CategoriaMapper categoriaMapper = new CategoriaMapper();
 
     public LivroDTO update(LivroEntity livroEntity) {
         LivroDTO livroDTO = new LivroDTO();
@@ -21,8 +19,8 @@ public class LivroMapper {
         livroDTO.setPreco(livroEntity.getPreco());
         livroDTO.setPaginas(livroEntity.getPaginas());
 //        livroDTO.setDataSis(livroEntity.getDataSis());
-        livroDTO.setEditora(editoraMapper.update(livroEntity.getEditora()));
-        livroDTO.setCategoria(categoriaMapper.update(livroEntity.getCategoria()));
+//        livroDTO.setEditora(editoraMapper.update(livroEntity.getEditora()));
+//        livroDTO.setCategoria(categoriaMapper.update(livroEntity.getCategoria()));
         return livroDTO;
     }
 
@@ -35,8 +33,8 @@ public class LivroMapper {
         livroEntity.setPreco(livroDTO.getPreco());
         livroEntity.setPaginas(livroDTO.getPaginas());
 //        livroEntity.setDataSis(livroDTO.getDataSis());
-        livroEntity.setEditora(editoraMapper.update(livroDTO.getEditora()));
-        livroEntity.setCategoria(categoriaMapper.update(livroDTO.getCategoria()));
+//        livroEntity.setEditora(editoraMapper.update(livroDTO.getEditora()));
+//        livroEntity.setCategoria(categoriaMapper.update(livroDTO.getCategoria()));
         return livroEntity;
     }
 

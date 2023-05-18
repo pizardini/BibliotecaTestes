@@ -22,14 +22,6 @@ public class LivroEntity {
     @Column(name="isbn", nullable = false, unique = true, length = 13)
     private String isbn;
 
-    @ManyToOne
-    @JoinColumn(name="editora")
-    private EditoraEntity editora;
-
-    @ManyToOne
-    @JoinColumn(name="categoria")
-    private CategoriaEntity categoria;
-
     @Column(name="resumo", nullable = false)
     private String resumo;
 
@@ -39,7 +31,7 @@ public class LivroEntity {
     @Column(name="preço", nullable = false)
     private Double preco;
 
-    @Column(name="n° de páginas", nullable = false)
+    @Column(name="paginas", nullable = false)
     private Integer paginas;
 
     @Column

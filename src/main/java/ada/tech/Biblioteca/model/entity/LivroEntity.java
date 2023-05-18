@@ -19,10 +19,10 @@ public class LivroEntity {
     @Column(name="titulo", nullable = false, unique = true)
     private String titulo;
 
-    @Column(name="isbn", nullable = false, unique = true, length = 13)
+    @Column(name="isbn", nullable = false, unique = true)
     private String isbn;
 
-    @Column(name="resumo", nullable = false)
+    @Column(name="resumo", nullable = false, length = 500)
     private String resumo;
 
     @Column

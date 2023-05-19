@@ -7,6 +7,7 @@ import ada.tech.Biblioteca.model.mapper.LivroMapper;
 import ada.tech.Biblioteca.service.LivroService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -15,6 +16,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -25,6 +27,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 public class LivroControllerTest {
@@ -34,6 +39,9 @@ public class LivroControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockBean
+    private LivroService livroService;
 
     @Autowired
     private LivroRepository repository;
@@ -60,6 +68,16 @@ public class LivroControllerTest {
     }
 
     @Test
+    public void listarLivrosExceptionTest() throws Exception {
+        when(livroService.listar()).thenThrow(new RuntimeException("Erro ao listar livros."));
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/livros"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.mensagem").value("Erro ao listar livros."));
+    }
+
+    @Test
     public void criarLivroTest() throws Exception {
         LivroDTO livroDTO = new LivroDTO();
         livroDTO.setTitulo("Criar Livro Teste");
@@ -80,6 +98,17 @@ public class LivroControllerTest {
                         .content(json))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void criarLivroExceptionTest() throws Exception {
+        LivroDTO livroDTO = new LivroDTO();
+        when(livroService.criar(livroDTO)).thenThrow(new RuntimeException());
+
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/livros")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
@@ -227,7 +256,7 @@ public class LivroControllerTest {
     }
 
     @Test
-    public void pegarUmLivroTest() throws Exception {
+    public void pegarUmTest() throws Exception {
 
         LivroEntity livro = new LivroEntity();
         livro.setTitulo("Livro Pegar Um");
@@ -242,6 +271,27 @@ public class LivroControllerTest {
         this.mockMvc.perform(MockMvcRequestBuilders.get("/livros/{id}", livro.getId()))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void pegarUmNotFound() throws Exception {
+        Long livroId = 2L;
+        when(livroService.pegarPorId(livroId)).thenThrow(new EntityNotFoundException());
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/livros/{id}", livroId))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+
+    @Test
+    public void pegarExceptionTest() throws Exception {
+        Long livroId = 3L;
+        when(livroService.pegarPorId(livroId)).thenThrow(new RuntimeException("Erro ao pegar livro."));
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/livros/{id}", livroId))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.mensagem").value("Erro ao pegar livro."));
     }
 
     @Test

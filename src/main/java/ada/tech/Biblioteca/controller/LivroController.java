@@ -27,7 +27,6 @@ public class LivroController {
             log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MensagemDTO(e.getMessage()));
         }
-
     }
 
     @GetMapping("/{id}")

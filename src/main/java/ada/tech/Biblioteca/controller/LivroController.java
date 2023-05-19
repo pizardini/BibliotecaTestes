@@ -46,7 +46,7 @@ public class LivroController {
     public ResponseEntity<Object> criar(@RequestBody @Valid LivroDTO livroDTO) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(livroService.criar(livroDTO));
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MensagemDTO(e.getMessage()));
         }
@@ -78,6 +78,8 @@ public class LivroController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MensagemDTO(e.getMessage()));
         }
     }
+
+
 
 
     @GetMapping("/BuscaNomeIsbn")

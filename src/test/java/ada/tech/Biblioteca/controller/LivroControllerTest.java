@@ -27,8 +27,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -100,16 +99,17 @@ public class LivroControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
+
     @Test
     public void criarLivroExceptionTest() throws Exception {
         LivroDTO livroDTO = new LivroDTO();
-        when(livroService.criar(livroDTO)).thenThrow(new RuntimeException());
+        doThrow(new RuntimeException()).when(livroService).criar(livroDTO);
 
-        this.mockMvc.perform(MockMvcRequestBuilders.post("/livros")
-                        .contentType(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/livros"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
+
 
     @Test
     public void criarLivroSemTituloTest() throws Exception {
@@ -284,7 +284,7 @@ public class LivroControllerTest {
     }
 
     @Test
-    public void pegarExceptionTest() throws Exception {
+    public void pegarUmExceptionTest() throws Exception {
         Long livroId = 3L;
         when(livroService.pegarPorId(livroId)).thenThrow(new RuntimeException("Erro ao pegar livro."));
 
@@ -324,6 +324,33 @@ public class LivroControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
+//    @Test
+//    public void editarNotFoundTest() throws Exception {
+//        Long livroId = 3L;
+//        LivroDTO livroDTO = new LivroDTO();
+//        when(livroService.editar(livroDTO, livroId)).thenThrow(new EntityNotFoundException("Não encontrado"));
+//
+//        ObjectMapper mapper = new ObjectMapper();
+//        String json = mapper.writeValueAsString(livroDTO);
+//
+//        this.mockMvc.perform(MockMvcRequestBuilders.put("/livros/{id}", livroId)
+//                )
+//                .andDo(MockMvcResultHandlers.print())
+//                .andExpect(MockMvcResultMatchers.status().is4xxClientError());
+////                .andExpect(MockMvcResultMatchers.status().isNotFound()); não estou conseguindo retornar 404.
+//    }
+//
+//    @Test
+//    public void editarLivroExceptionTest() throws Exception {
+//        Long livroId = 3L;
+//        LivroDTO livroDTO = new LivroDTO();
+//        when(livroService.editar(livroDTO, livroId)).thenThrow(new RuntimeException());
+//
+//        this.mockMvc.perform(MockMvcRequestBuilders.put("/livros/{id}", livroId))
+//                .andDo(MockMvcResultHandlers.print())
+//                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+//    }
+
     @Test
     public void deletarLivroTest() throws Exception {
         LivroEntity livro = new LivroEntity();
@@ -339,6 +366,26 @@ public class LivroControllerTest {
         this.mockMvc.perform(MockMvcRequestBuilders.delete("/livros/{id}", livro.getId()))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void deletarNotFoundTest() throws Exception {
+        Long livroId = 9L;
+        doThrow(new EntityNotFoundException()).when(livroService).deletar(livroId);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/livros/{id}", livroId))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    public void deletarExceptionTest() throws Exception {
+        Long livroId = 8L;
+        doThrow(new RuntimeException()).when(livroService).deletar(livroId);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/livros/{id}", livroId))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test

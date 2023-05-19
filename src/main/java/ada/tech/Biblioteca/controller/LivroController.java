@@ -19,6 +19,7 @@ public class LivroController {
     @Autowired
     private LivroService livroService;
 
+    @GetMapping
     public ResponseEntity<Object> listar() {
         try {
             return ResponseEntity.ok(livroService.listar());
@@ -80,7 +81,7 @@ public class LivroController {
     }
 
 
-    @GetMapping()
+    @GetMapping("/BuscaNomeIsbn")
     public ResponseEntity<Object> buscarPorNomeOuIsbn(@RequestParam(name="nome", defaultValue = "") String nome,
                                                       @RequestParam(name="isbn", defaultValue = "") String isbn) {
         try {

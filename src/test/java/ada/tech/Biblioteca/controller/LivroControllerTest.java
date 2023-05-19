@@ -7,7 +7,9 @@ import ada.tech.Biblioteca.model.mapper.LivroMapper;
 import ada.tech.Biblioteca.service.LivroService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,28 +53,11 @@ public class LivroControllerTest {
 
     @Test
     public void listarLivrosTest() throws Exception {
-        List<LivroDTO> listaLivros = new ArrayList<>(); // Lista simulada de livros
-
-
-        LivroDTO livro1 = new LivroDTO();
-        livro1.setTitulo("Teste de listar livros");
-        livro1.setIsbn("1");
-        livro1.setResumo("Lorem ipsum");
-        livro1.setSumario("sumario de teste");
-        livro1.setPreco(59.90);
-        livro1.setPaginas(200);
-
-
-        listaLivros.add(livro1);
-
-        LivroService livroService = Mockito.mock(LivroService.class);
-        Mockito.when(livroService.listar()).thenReturn(listaLivros);
-
         this.mockMvc.perform(MockMvcRequestBuilders.get("/livros"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk());
-    }
 
+    }
 
     @Test
     public void criarLivroTest() throws Exception {
@@ -305,4 +290,43 @@ public class LivroControllerTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+
+    @Test
+    public void buscarPorNomeOuIsbnTest() throws Exception {
+        LivroEntity livro1 = new LivroEntity();
+        livro1.setTitulo("Livro de Aventura");
+        livro1.setIsbn("1234567890123");
+        livro1.setResumo("Resumo do livro de aventura");
+        livro1.setPreco(59.99);
+        livro1.setPaginas(200);
+
+        LivroEntity livro2 = new LivroEntity();
+        livro2.setTitulo("Livro de Ficção Científica");
+        livro2.setIsbn("9876543210987");
+        livro2.setResumo("Resumo do livro de ficção científica");
+        livro2.setPreco(24.99);
+        livro2.setPaginas(300);
+
+        repository.save(livro1);
+        repository.save(livro2);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/livros/BuscaNomeIsbn")
+                        .param("nome", "Aventura")
+                        .param("isbn", ""))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/livros/BuscaNomeIsbn")
+                        .param("nome", "")
+                        .param("isbn", "9876543210987"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/livros/BuscaNomeIsbn")
+                        .param("nome", "Romance")
+                        .param("isbn", "1234567890123"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
 }

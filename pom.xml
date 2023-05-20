@@ -79,7 +79,12 @@
 			<artifactId>jackson-datatype-jsr310</artifactId>
 			<version>2.13.0</version>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>io.github.glytching</groupId>
+            <artifactId>junit-extensions</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>

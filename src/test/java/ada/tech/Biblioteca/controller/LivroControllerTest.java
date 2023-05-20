@@ -1,32 +1,31 @@
 package ada.tech.Biblioteca.controller;
 
 import ada.tech.Biblioteca.model.dto.LivroDTO;
+import ada.tech.Biblioteca.model.dto.MensagemDTO;
 import ada.tech.Biblioteca.model.entity.LivroEntity;
 import ada.tech.Biblioteca.repository.LivroRepository;
-import ada.tech.Biblioteca.model.mapper.LivroMapper;
 import ada.tech.Biblioteca.service.LivroService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.persistence.EntityNotFoundException;
-import org.junit.Before;
+import org.junit.Rule;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -99,17 +98,32 @@ public class LivroControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
+//    @Rule
+//    public ExpectedException exceptionRule = ExpectedException.none();
+
+//    @Test
+//    public void criarLivroExceptionTest() throws Exception {
+//        doThrow(new RuntimeException()).when(livroService).criar(any(LivroDTO.class));
+//
+//        this.mockMvc.perform(MockMvcRequestBuilders.post("/livros"))
+//                .andDo(MockMvcResultHandlers.print())
+//                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+//    }
+//    Não deu certo criar uma instãncia qualquer, achei o método @Rule que talvez possa ajudar, mas não consegui aplicar
+
 
     @Test
-    public void criarLivroExceptionTest() throws Exception {
+    public void criarLivroExceptionUnitarioTest() {
         LivroDTO livroDTO = new LivroDTO();
-        doThrow(new RuntimeException()).when(livroService).criar(livroDTO);
+        when(livroService.criar(livroDTO)).thenThrow(new RuntimeException("Mensagem da exceção"));
 
-        this.mockMvc.perform(MockMvcRequestBuilders.post("/livros"))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        ResponseEntity<Object> response = livroController.criar(livroDTO);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Mensagem da exceção", ((MensagemDTO) response.getBody()).getMensagem());
+
+        verify(livroService, times(1)).criar(livroDTO);
     }
-
 
     @Test
     public void criarLivroSemTituloTest() throws Exception {
@@ -244,7 +258,7 @@ public class LivroControllerTest {
         livroDTO.setDataSis(LocalDate.now().minusDays(1));
 
         ObjectMapper mapper = new ObjectMapper();
-//        mapper.registerModule(new JavaTimeModule());
+//        mapper.registerModule(new JavaTimeModule()); correção do localdate que acabou não precisando depois
         mapper.findAndRegisterModules();
         String json = mapper.writeValueAsString(livroDTO);
 
@@ -257,7 +271,6 @@ public class LivroControllerTest {
 
     @Test
     public void pegarUmTest() throws Exception {
-
         LivroEntity livro = new LivroEntity();
         livro.setTitulo("Livro Pegar Um");
         livro.setIsbn("88888888");
@@ -350,6 +363,31 @@ public class LivroControllerTest {
 //                .andDo(MockMvcResultHandlers.print())
 //                .andExpect(MockMvcResultMatchers.status().isBadRequest());
 //    }
+    // Código que está dando certo, mas não está passando pelo catch exception do Controller
+
+    @Test
+    public void editarEntityNotFoundExceptionTest() {
+        Long livroId = 3L;
+        LivroDTO livroDTO = new LivroDTO();
+
+        when(livroService.editar(livroDTO, livroId)).thenThrow(new EntityNotFoundException());
+        ResponseEntity<Object> response = livroController.editar(livroDTO, livroId);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        verify(livroService, times(1)).editar(livroDTO, livroId);
+    }
+
+    @Test
+    public void editarRuntimeExceptionTest() {
+        Long livroId = 3L;
+        LivroDTO livroDTO = new LivroDTO();
+
+        when(livroService.editar(livroDTO, livroId)).thenThrow(new RuntimeException("Erro ao editar livro"));
+        ResponseEntity<Object> response = livroController.editar(livroDTO, livroId);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Erro ao editar livro", ((MensagemDTO) response.getBody()).getMensagem());
+        verify(livroService, times(1)).editar(livroDTO, livroId);
+    }
+
 
     @Test
     public void deletarLivroTest() throws Exception {
@@ -371,7 +409,7 @@ public class LivroControllerTest {
     @Test
     public void deletarNotFoundTest() throws Exception {
         Long livroId = 9L;
-        doThrow(new EntityNotFoundException()).when(livroService).deletar(livroId);
+        doThrow(new EntityNotFoundException("sdfjkshk")).when(livroService).deletar(livroId);
 
         this.mockMvc.perform(MockMvcRequestBuilders.delete("/livros/{id}", livroId))
                 .andDo(MockMvcResultHandlers.print())

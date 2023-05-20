@@ -57,7 +57,6 @@ public class LivroService {
             repository.delete(livroEntity);
             return;
         }
-
         throw new EntityNotFoundException("Livro não encontrado.");
     }
 
